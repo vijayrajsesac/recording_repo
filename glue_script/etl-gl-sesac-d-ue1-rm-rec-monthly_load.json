@@ -1,0 +1,45 @@
+{
+  "name" : "etl-gl-sesac-d-ue1-rm-rec-monthly_load",
+  "description" : "",
+  "role" : "arn:aws:iam::128153543912:role/role-iam-sesac-d-ue1-rmd-glue",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 15
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-128153543912-us-east-1/scripts/etl-gl-sesac-d-ue1-rm-rec-monthly_load.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-glue-datacatalog" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--TempDir" : "s3://aws-glue-assets-128153543912-us-east-1/temporary/",
+    "--bucket" : "s3-sesac-d-ue1-recording-metadata",
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-128153543912-us-east-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "false",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-language" : "python",
+    "--table" : "APCTS.SPI_RECORDING_METADATA_STG",
+    "--enable-auto-scaling" : "true",
+    "--log_table" : "RECEIVER.SPI_RECORDING_METADATA_LOADLOG"
+  },
+  "connections" : {
+    "connections" : [ "cn-gl-sesac-d-ue1-rmd-jdbc-oracle" ]
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 4,
+  "timeout" : 2880,
+  "maxCapacity" : 4.0,
+  "glueVersion" : "4.0",
+  "numberOfWorkers" : 4,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "recording_repo",
+    "branch" : "dev",
+    "folder" : "glue_script"
+  }
+}
