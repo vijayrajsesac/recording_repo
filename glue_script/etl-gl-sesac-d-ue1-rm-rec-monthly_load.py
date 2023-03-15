@@ -86,7 +86,6 @@ def insert_log(spark, filename, sender, df_count, row_count, logDataSchema):
         log_df = log_df.withColumn("creation_date", F.current_date())
         log_df.show(truncate=False)
         log_df.write.format('jdbc').option('driver',conn_info['DRIVER']).option('url',conn_info['CONN_URL']).option('user',conn_info['USERNAME']).option('password',conn_info['PASSWORD']).mode('append').option('dbtable',log_table).save()
-        # log_df.write.format('jdbc').option('driver',conn_info['DRIVER']).option('url',conn_info['CONN_URL']).option('user',conn_info['USERNAME']).option('password',conn_info['PASSWORD']).mode('overwrite').option('dbtable',log_table).save()
     except Exception as error:
         logger.error(error)
         
