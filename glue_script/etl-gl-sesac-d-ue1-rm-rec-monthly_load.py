@@ -99,10 +99,6 @@ logger = glueContext.get_logger()
 spark = glueContext.spark_session
 job = Job(glueContext)
 
-# print(args['sender'])
-# print(args['path'])
-# print(args['bucket'])
-
 sender = args['sender']
 path = args['path']
 sender_ids = args['sender_ids']
