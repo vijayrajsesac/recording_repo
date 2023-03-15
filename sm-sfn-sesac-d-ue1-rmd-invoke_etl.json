@@ -1,0 +1,100 @@
+{
+  "Comment": "sm-sfn-sesac-d-ue1-rmd-invoke_etl",
+  "StartAt": "Lambda-s3_event_processor",
+  "States": {
+    "Lambda-s3_event_processor": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-east-1:128153543912:function:fn-l-sesac-d-ue1-rm-rec-s3_event_processor"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Choice"
+    },
+    "Choice": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Or": [
+            {
+              "Variable": "$.sender",
+              "StringEquals": "2"
+            },
+            {
+              "Variable": "$.sender",
+              "StringEquals": "15"
+            },
+            {
+              "Variable": "$.sender",
+              "StringEquals": "22"
+            },
+            {
+              "Variable": "$.sender",
+              "StringEquals": "23"
+            },
+            {
+              "Variable": "$.sender",
+              "StringEquals": "27"
+            }
+          ],
+          "Next": "Glue-StartJobRun-rec-monthly_load"
+        }
+      ],
+      "Default": "Pass"
+    },
+    "Pass": {
+      "Type": "Pass",
+      "End": true
+    },
+    "Glue-StartJobRun-rec-monthly_load": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "etl-gl-sesac-d-ue1-rm-rec-monthly_load",
+        "Arguments": {
+          "--sender.$": "$.sender",
+          "--path.$": "$.path"
+        }
+      },
+      "Next": "Success",
+      "ResultPath": "$.output",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "Failure-SNS-Publish"
+        }
+      ]
+    },
+    "Failure-SNS-Publish": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "Message.$": "$",
+        "TopicArn": "arn:aws:sns:us-east-1:128153543912:tpc-sns-sesac-d-ue1-rmd-rec-monthly-load"
+      },
+      "Next": "Fail"
+    },
+    "Fail": {
+      "Type": "Fail"
+    },
+    "Success": {
+      "Type": "Succeed"
+    }
+  }
+}
