@@ -39,7 +39,7 @@
   "sourceControlDetails" : {
     "provider" : "GITHUB",
     "repository" : "recording_repo",
-    "branch" : "dev",
+    "branch" : "main",
     "folder" : "glue_script"
   }
 }
