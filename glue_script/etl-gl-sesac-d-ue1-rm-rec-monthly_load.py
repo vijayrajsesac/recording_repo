@@ -168,8 +168,6 @@ try:
     
     # rec_data_df.write.format('jdbc').option("numPartitions", 12).option("isolationLevel", "NONE").option('driver',conn_info['DRIVER']).option('url',conn_info['CONN_URL']).option('user',conn_info['USERNAME']).option('password',conn_info['PASSWORD']).mode('append').option('dbtable',table).save()
     
-    # rec_data_df.write.format('jdbc').option('driver',conn_info['DRIVER']).option('url',conn_info['CONN_URL']).option('user',conn_info['USERNAME']).option('password',conn_info['PASSWORD']).mode('overwrite').option('dbtable',table).save()
-    
     logger.info('-- DATA FILE WRITE SUCCEEDED --')
 except Exception as error:
     logger.error(error)
