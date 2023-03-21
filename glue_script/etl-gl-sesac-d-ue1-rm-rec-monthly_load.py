@@ -91,7 +91,7 @@ def insert_log(spark, filename, sender, df_count, row_count, logDataSchema):
         
 
 ## @params: [JOB_NAME] .
-args = getResolvedOptions(sys.argv, ['JOB_NAME','sender','path','sender_ids','bucket','table','log_table'])
+args = getResolvedOptions(sys.argv, ['JOB_NAME','sender','path','bucket','table','log_table'])
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
@@ -101,7 +101,6 @@ job = Job(glueContext)
 
 sender = args['sender']
 path = args['path']
-sender_ids = args['sender_ids']
 bucket = args['bucket']
 table = args['table']
 log_table = args['log_table']
@@ -109,8 +108,6 @@ log_table = args['log_table']
 driver = 'oracle.jdbc.driver.OracleDriver'
 connection = 'cn-gl-sesac-d-ue1-rmd-jdbc-oracle'
 final_path = 's3://' + bucket + '/' + path
-
-sender_list = sender_ids.split(',')
 
 customSchema = StructType([ \
     StructField("hfa_song_code",StringType(),True), \
