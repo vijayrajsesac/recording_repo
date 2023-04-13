@@ -79,7 +79,19 @@
           ],
           "Next": "Failure-SNS-Publish"
         }
-      ]
+      ],
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.Timeout"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 60,
+          "MaxAttempts": 1,
+          "Comment": "Retry when runs Longer than usual (3hrs)"
+        }
+      ],
+      "TimeoutSeconds": 10800
     },
     "Failure-SNS-Publish": {
       "Type": "Task",
