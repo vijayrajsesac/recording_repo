@@ -49,6 +49,10 @@
             {
               "Variable": "$.sender",
               "StringEquals": "27"
+            },	
+            {	
+              "Variable": "$.sender",	
+              "StringEquals": "5"	
             }
           ],
           "Next": "Glue-StartJobRun-rec-monthly_load"
